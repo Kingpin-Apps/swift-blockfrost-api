@@ -56,11 +56,19 @@ public struct Blockfrost {
     public let network: Network
     public let projectId: String
     
-    public init(network: Network, projectId: String) {
+    public init(network: Network, projectId: String, basePath: String? = nil) {
         self.network = network
         self.projectId = projectId
+        
+        let serverURL: URL
+        if let basePath = basePath {
+            serverURL = URL(string: basePath)!
+        } else {
+            serverURL = try! network.url()
+        }
+        
         self.client = Client(
-            serverURL: try! network.url(),
+            serverURL: serverURL,
             transport: URLSessionTransport(),
             middlewares: [AuthenticationMiddleware(authorizationHeaderFieldValue: projectId)]
         )
