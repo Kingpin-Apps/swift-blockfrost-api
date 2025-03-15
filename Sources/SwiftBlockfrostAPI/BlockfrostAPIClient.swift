@@ -56,9 +56,19 @@ public struct Blockfrost {
     public let network: Network
     public let projectId: String
     
-    public init(network: Network, projectId: String, basePath: String? = nil) {
+    public init(
+        network: Network,
+        projectId: String? = nil,
+        basePath: String? = nil,
+        environmentVariable: String? = "BF_PROJECT_ID"
+    ) {
         self.network = network
-        self.projectId = projectId
+        
+        if let projectId = projectId {
+            self.projectId = projectId
+        } else {
+            self.projectId = ProcessInfo.processInfo.environment[environmentVariable!]!
+        }
         
         let serverURL: URL
         if let basePath = basePath {
@@ -70,7 +80,7 @@ public struct Blockfrost {
         self.client = Client(
             serverURL: serverURL,
             transport: URLSessionTransport(),
-            middlewares: [AuthenticationMiddleware(authorizationHeaderFieldValue: projectId)]
+            middlewares: [AuthenticationMiddleware(authorizationHeaderFieldValue: self.projectId)]
         )
     }
             

@@ -1,0 +1,26 @@
+{
+  "configurations" : [
+    {
+      "id" : "32BC9DBE-5698-4B9D-975B-A7C11877E441",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "environmentVariableEntries" : [
+
+    ]
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "SwiftBlockfrostAPITests",
+        "name" : "SwiftBlockfrostAPITests"
+      }
+    }
+  ],
+  "version" : 1
+}
