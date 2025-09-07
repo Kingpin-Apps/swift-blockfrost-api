@@ -60,24 +60,37 @@ public struct Blockfrost {
         network: Network,
         projectId: String? = nil,
         basePath: String? = nil,
-        environmentVariable: String? = "BF_PROJECT_ID"
-    ) {
+        environmentVariable: String? = "BLOCKFROST_API_KEY",
+        client: Client? = nil,
+    ) throws {
         self.network = network
         
         if let projectId = projectId {
             self.projectId = projectId
+        } else if let environmentVariable = environmentVariable {
+            guard let projectId = ProcessInfo.processInfo.environment[environmentVariable],
+                  !projectId.isEmpty else {
+                throw BlockfrostAPIError.missingProjectId("Environment variable \(environmentVariable) is not set or empty.")
+            }
+            self.projectId = projectId
         } else {
-            self.projectId = ProcessInfo.processInfo.environment[environmentVariable!]!
+            throw BlockfrostAPIError.missingProjectId("No project ID provided and no environment variable specified.")
         }
         
         let serverURL: URL
         if let basePath = basePath {
-            serverURL = URL(string: basePath)!
+            guard let url = URL(string: basePath) else {
+                throw BlockfrostAPIError.invalidBasePath("Invalid base path: \(basePath)")
+            }
+            serverURL = url
         } else {
-            serverURL = try! network.url()
+            guard let url = try? network.url() else {
+                throw BlockfrostAPIError.invalidBasePath("Could not determine server URL for network \(network).")
+            }
+            serverURL = url
         }
         
-        self.client = Client(
+        self.client = client ?? Client(
             serverURL: serverURL,
             transport: URLSessionTransport(),
             middlewares: [AuthenticationMiddleware(authorizationHeaderFieldValue: self.projectId)]
