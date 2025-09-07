@@ -1,3 +1,9 @@
+## 0.1.4 (2025-09-06)
+
+### Fix
+
+- improve client init and add mock client in tests
+
 ## 0.1.3 (2025-03-15)
 
 ### Fix
