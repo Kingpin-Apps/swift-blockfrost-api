@@ -1,3 +1,9 @@
+## 0.1.5 (2025-09-25)
+
+### Fix
+
+- update packages and fix builds
+
 ## 0.1.4 (2025-09-06)
 
 ### Fix
