@@ -61,7 +61,7 @@ public struct Blockfrost {
         projectId: String? = nil,
         basePath: String? = nil,
         environmentVariable: String? = "BLOCKFROST_API_KEY",
-        client: Client? = nil,
+        client: Client? = nil
     ) throws {
         self.network = network
         
